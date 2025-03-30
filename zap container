@@ -57,3 +57,52 @@ curl "http://localhost:8080/JSON/core/view/sites/"
 
 
 -------------
+
+
+
+
+
+docker stop $(docker ps -aq)
+docker rm $(docker ps -aq)
+docker network prune -f
+
+
+
+
+
+
+
+
+
+
+
+docker build -t zap-ubuntu .    
+
+docker run -d --name zap-proxy -p 8080:8080 zap-ubuntu 
+
+
+ curl "http://localhost:8080/JSON/core/view/sites/"
+
+
+
+run the zap docker 
+
+
+
+docker build -t zap-ubuntu .   
+
+docker run -d --name zap-proxy -p 8080:8080 zap-ubuntu
+
+
+
+------
+
+run the browser agent docker 
+
+
+
+docker run -d --name testa -e HTTP_PROXY=http://host.docker.internal:8080 -e HTTPS_PROXY=http://host.docker.internal:8080 testa
+
+
+docker exec -it testa bash
+
