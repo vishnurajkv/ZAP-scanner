@@ -33,6 +33,16 @@ zap.sh -daemon -host 0.0.0.0 -port 8080 -config api.disablekey=true -config api.
 tail -f /dev/null' > /opt/start-zap.sh && \
     chmod +x /opt/start-zap.sh
 
+# Start ZAP and install CA certificate
+CMD ["/bin/bash", "-c", "\
+    $ZAP_HOME/zap.sh -daemon -port 8080 -host 0.0.0.0 && \
+    sleep 10 && \
+    curl -sSLk http://localhost:8080/OTHER/core/other/rootcert/ -o $ZAP_CERT_PATH && \
+    cp $ZAP_CERT_PATH /usr/local/share/ca-certificates/zap_ca.crt && \
+    update-ca-certificates && \
+    tail -f /dev/null"]
+
+
 # Start the script on container launch
 ENTRYPOINT ["/opt/start-zap.sh"]
 
